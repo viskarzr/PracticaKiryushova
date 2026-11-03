@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace PracticaKiryushova
 {
     /// <summary>
@@ -16,11 +17,6 @@ namespace PracticaKiryushova
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        private int[] _masFirst;
-        private int[] _masSecond;
-
-        private readonly Random _rnd = new Random();
 
         public MainWindow()
         {
@@ -38,17 +34,17 @@ namespace PracticaKiryushova
                 tbSize.Clear();
                 return;
             }
-
-            _masFirst = new int[size];
+            Random _rnd = new Random();
+            masFirst = new int[size];
             for (int i = 0; i < size; i++)
             {
-                _masFirst[i] = _rnd.Next(-20, 30);
+                masFirst[i] = _rnd.Next(-20, 30);
             }
-            dgFirst.ItemsSource = _masFirst.ToDataTable().DefaultView;
+            dgFirst.ItemsSource = masFirst.ToDataTable().DefaultView;
 
-            DrawGraph(csFirst, _masFirst, Brushes.Blue, "Исходный массив");
+            GraphRenderer.DrawGraph(csFirst, masFirst, Brushes.Blue, "Исходный массив");
 
-            _masSecond = null;
+            masSecond = null;
             dgSecond.ItemsSource = null;
             csSecond.Children.Clear();
         }
@@ -71,7 +67,7 @@ namespace PracticaKiryushova
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
-
+            this.Close();
         }
 
         private void dgFirst_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
@@ -83,132 +79,132 @@ namespace PracticaKiryushova
 
         private void btnSwap_Click(object sender, RoutedEventArgs e)
         {
-            if (_masFirst == null || _masFirst.Length == 0)
+            if (masFirst == null || masFirst.Length == 0)
             {
                 MessageBox.Show("Сначала создайте массив!", "Внимание");
                 return;
             }
 
-            _masSecond = (int[])_masFirst.Clone();
+            masSecond = (int[])masFirst.Clone();
             int minIndex = 0;
             int maxIndex = 0;
 
-            for (int i = 1; i < _masSecond.Length; i++)
+            for (int i = 1; i < masSecond.Length; i++)
             {
-                if (_masSecond[i] < _masSecond[minIndex]) minIndex = i;
-                if (_masSecond[i] > _masSecond[maxIndex]) maxIndex = i;
+                if (masSecond[i] < masSecond[minIndex]) minIndex = i;
+                if (masSecond[i] > masSecond[maxIndex]) maxIndex = i;
             }
-            int temp = _masSecond[minIndex];
-            _masSecond[minIndex] = _masSecond[maxIndex];
-            _masSecond[maxIndex] = temp;
-            dgSecond.ItemsSource = _masSecond.ToDataTable().DefaultView;
-            DrawGraph(csSecond, _masSecond, Brushes.Red, "После замены Min/Max");
+            int temp = masSecond[minIndex];
+            masSecond[minIndex] = masSecond[maxIndex];
+            masSecond[maxIndex] = temp;
+            dgSecond.ItemsSource = masSecond.ToDataTable().DefaultView;
+            GraphRenderer.DrawGraph(csSecond, masSecond, Brushes.Red, "После замены Min/Max");
         }
     
 
-      private void DrawGraph(Canvas canvas, int[] data, Brush color, string title)
-        {
-            canvas.Children.Clear();
+      //private void DrawGraph(Canvas canvas, int[] data, Brush color, string title)
+      //  {
+      //      canvas.Children.Clear();
 
-            if (data == null || data.Length < 2) return;
+      //      if (data == null || data.Length < 2) return;
 
-            double width = canvas.ActualWidth;
-            double height = canvas.ActualHeight;
+      //      double width = canvas.ActualWidth;
+      //      double height = canvas.ActualHeight;
 
-            if (width <= 0) width = 479;
-            if (height <= 0) height = 270;
+      //      if (width <= 0) width = 479;
+      //      if (height <= 0) height = 270;
 
-            double marginLeft = 40;
-            double marginBottom = 30;
-            double marginTop = 20;
-            double marginRight = 20;
+      //      double marginLeft = 40;
+      //      double marginBottom = 30;
+      //      double marginTop = 20;
+      //      double marginRight = 20;
 
-            double plotWidth = width - marginLeft - marginRight;
-            double plotHeight = height - marginBottom - marginTop;
+      //      double plotWidth = width - marginLeft - marginRight;
+      //      double plotHeight = height - marginBottom - marginTop;
 
-            double minVal = data.Min();
-            double maxVal = data.Max();
-            double range = (maxVal - minVal == 0) ? 1 : (maxVal - minVal);
-
-
-            var axisBrush = Brushes.Black;
-            canvas.Children.Add(new Line
-            {
-                X1 = marginLeft,
-                Y1 = height - marginBottom,
-                X2 = marginLeft,
-                Y2 = marginTop,
-                Stroke = axisBrush,
-                StrokeThickness = 2
-            });
-
-            canvas.Children.Add(new Line
-            {
-                X1 = marginLeft,
-                Y1 = height - marginBottom,
-                X2 = width - marginRight,
-                Y2 = height - marginBottom,
-                Stroke = axisBrush,
-                StrokeThickness = 2
-            });
-
-            int steps = 5;
-            double stepValue = range / steps;
-            for (int i = 0; i <= steps; i++)
-            {
-                double currentVal = minVal + (i * stepValue);
-                double percent = (currentVal - minVal) / range;
-                double yPos = (height - marginBottom) - (percent * plotHeight);
-
-                canvas.Children.Add(new Line
-                {
-                    X1 = marginLeft - 5,
-                    Y1 = yPos,
-                    X2 = marginLeft,
-                    Y2 = yPos,
-                    Stroke = Brushes.Gray,
-                    StrokeThickness = 1
-                });
+      //      double minVal = data.Min();
+      //      double maxVal = data.Max();
+      //      double range = (maxVal - minVal == 0) ? 1 : (maxVal - minVal);
 
 
-                var label = new TextBlock
-                {
-                    Text = currentVal.ToString("F1"),
-                    FontSize = 10,
-                    Foreground = Brushes.Black
-                };
-                Canvas.SetLeft(label, marginLeft - 35);
-                Canvas.SetTop(label, yPos - 6);
-                canvas.Children.Add(label);
-            }
+      //      var axisBrush = Brushes.Black;
+      //      canvas.Children.Add(new Line
+      //      {
+      //          X1 = marginLeft,
+      //          Y1 = height - marginBottom,
+      //          X2 = marginLeft,
+      //          Y2 = marginTop,
+      //          Stroke = axisBrush,
+      //          StrokeThickness = 2
+      //      });
 
-            var points = new PointCollection();
-            for (int i = 0; i < data.Length; i++)
-            {
-                double x = marginLeft + (i * plotWidth) / (data.Length - 1);
-                double percentY = (data[i] - minVal) / range;
-                double y = (height - marginBottom) - (percentY * plotHeight);
+      //      canvas.Children.Add(new Line
+      //      {
+      //          X1 = marginLeft,
+      //          Y1 = height - marginBottom,
+      //          X2 = width - marginRight,
+      //          Y2 = height - marginBottom,
+      //          Stroke = axisBrush,
+      //          StrokeThickness = 2
+      //      });
 
-                points.Add(new Point(x, y));
-            }
+      //      int steps = 5;
+      //      double stepValue = range / steps;
+      //      for (int i = 0; i <= steps; i++)
+      //      {
+      //          double currentVal = minVal + (i * stepValue);
+      //          double percent = (currentVal - minVal) / range;
+      //          double yPos = (height - marginBottom) - (percent * plotHeight);
 
-            canvas.Children.Add(new Polyline
-            {
-                Points = points,
-                Stroke = color,
-                StrokeThickness = 2,
-                SnapsToDevicePixels = true
-            });
+      //          canvas.Children.Add(new Line
+      //          {
+      //              X1 = marginLeft - 5,
+      //              Y1 = yPos,
+      //              X2 = marginLeft,
+      //              Y2 = yPos,
+      //              Stroke = Brushes.Gray,
+      //              StrokeThickness = 1
+      //          });
 
-            var titleText = new TextBlock
-            {
-                Text = title,
-                FontWeight = FontWeights.Bold,
-                Foreground = Brushes.DarkBlue
-            };
-            Canvas.SetLeft(titleText, marginLeft);
-            Canvas.SetTop(titleText, 0);
-            canvas.Children.Add(titleText);
-        }
+
+      //          var label = new TextBlock
+      //          {
+      //              Text = currentVal.ToString("F1"),
+      //              FontSize = 10,
+      //              Foreground = Brushes.Black
+      //          };
+      //          Canvas.SetLeft(label, marginLeft - 35);
+      //          Canvas.SetTop(label, yPos - 6);
+      //          canvas.Children.Add(label);
+      //      }
+
+      //      var points = new PointCollection();
+      //      for (int i = 0; i < data.Length; i++)
+      //      {
+      //          double x = marginLeft + (i * plotWidth) / (data.Length - 1);
+      //          double percentY = (data[i] - minVal) / range;
+      //          double y = (height - marginBottom) - (percentY * plotHeight);
+
+      //          points.Add(new Point(x, y));
+      //      }
+
+      //      canvas.Children.Add(new Polyline
+      //      {
+      //          Points = points,
+      //          Stroke = color,
+      //          StrokeThickness = 2,
+      //          SnapsToDevicePixels = true
+      //      });
+
+      //      var titleText = new TextBlock
+      //      {
+      //          Text = title,
+      //          FontWeight = FontWeights.Bold,
+      //          Foreground = Brushes.DarkBlue
+      //      };
+      //      Canvas.SetLeft(titleText, marginLeft);
+      //      Canvas.SetTop(titleText, 0);
+      //      canvas.Children.Add(titleText);
+      //  }
     }
 }
