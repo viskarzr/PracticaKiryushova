@@ -58,6 +58,7 @@ namespace PracticaKiryushova
             masSecond = null;
             csFirst.Children.Clear();
             csSecond.Children.Clear();
+            tbSize.Clear();
         }
 
         private void btnInfo_Click(object sender, RoutedEventArgs e)
@@ -100,111 +101,5 @@ namespace PracticaKiryushova
             dgSecond.ItemsSource = masSecond.ToDataTable().DefaultView;
             GraphRenderer.DrawGraph(csSecond, masSecond, Brushes.Red, "После замены Min/Max");
         }
-    
-
-      //private void DrawGraph(Canvas canvas, int[] data, Brush color, string title)
-      //  {
-      //      canvas.Children.Clear();
-
-      //      if (data == null || data.Length < 2) return;
-
-      //      double width = canvas.ActualWidth;
-      //      double height = canvas.ActualHeight;
-
-      //      if (width <= 0) width = 479;
-      //      if (height <= 0) height = 270;
-
-      //      double marginLeft = 40;
-      //      double marginBottom = 30;
-      //      double marginTop = 20;
-      //      double marginRight = 20;
-
-      //      double plotWidth = width - marginLeft - marginRight;
-      //      double plotHeight = height - marginBottom - marginTop;
-
-      //      double minVal = data.Min();
-      //      double maxVal = data.Max();
-      //      double range = (maxVal - minVal == 0) ? 1 : (maxVal - minVal);
-
-
-      //      var axisBrush = Brushes.Black;
-      //      canvas.Children.Add(new Line
-      //      {
-      //          X1 = marginLeft,
-      //          Y1 = height - marginBottom,
-      //          X2 = marginLeft,
-      //          Y2 = marginTop,
-      //          Stroke = axisBrush,
-      //          StrokeThickness = 2
-      //      });
-
-      //      canvas.Children.Add(new Line
-      //      {
-      //          X1 = marginLeft,
-      //          Y1 = height - marginBottom,
-      //          X2 = width - marginRight,
-      //          Y2 = height - marginBottom,
-      //          Stroke = axisBrush,
-      //          StrokeThickness = 2
-      //      });
-
-      //      int steps = 5;
-      //      double stepValue = range / steps;
-      //      for (int i = 0; i <= steps; i++)
-      //      {
-      //          double currentVal = minVal + (i * stepValue);
-      //          double percent = (currentVal - minVal) / range;
-      //          double yPos = (height - marginBottom) - (percent * plotHeight);
-
-      //          canvas.Children.Add(new Line
-      //          {
-      //              X1 = marginLeft - 5,
-      //              Y1 = yPos,
-      //              X2 = marginLeft,
-      //              Y2 = yPos,
-      //              Stroke = Brushes.Gray,
-      //              StrokeThickness = 1
-      //          });
-
-
-      //          var label = new TextBlock
-      //          {
-      //              Text = currentVal.ToString("F1"),
-      //              FontSize = 10,
-      //              Foreground = Brushes.Black
-      //          };
-      //          Canvas.SetLeft(label, marginLeft - 35);
-      //          Canvas.SetTop(label, yPos - 6);
-      //          canvas.Children.Add(label);
-      //      }
-
-      //      var points = new PointCollection();
-      //      for (int i = 0; i < data.Length; i++)
-      //      {
-      //          double x = marginLeft + (i * plotWidth) / (data.Length - 1);
-      //          double percentY = (data[i] - minVal) / range;
-      //          double y = (height - marginBottom) - (percentY * plotHeight);
-
-      //          points.Add(new Point(x, y));
-      //      }
-
-      //      canvas.Children.Add(new Polyline
-      //      {
-      //          Points = points,
-      //          Stroke = color,
-      //          StrokeThickness = 2,
-      //          SnapsToDevicePixels = true
-      //      });
-
-      //      var titleText = new TextBlock
-      //      {
-      //          Text = title,
-      //          FontWeight = FontWeights.Bold,
-      //          Foreground = Brushes.DarkBlue
-      //      };
-      //      Canvas.SetLeft(titleText, marginLeft);
-      //      Canvas.SetTop(titleText, 0);
-      //      canvas.Children.Add(titleText);
-      //  }
     }
 }
