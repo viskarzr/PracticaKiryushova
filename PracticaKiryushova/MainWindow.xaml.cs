@@ -20,8 +20,7 @@ namespace PracticaKiryushova
 
         public MainWindow()
         {
-            InitializeComponent();
-           
+            InitializeComponent();      
         }
 
         int[] masFirst;
@@ -34,14 +33,8 @@ namespace PracticaKiryushova
                 tbSize.Clear();
                 return;
             }
-            Random _rnd = new Random();
-            masFirst = new int[size];
-            for (int i = 0; i < size; i++)
-            {
-                masFirst[i] = _rnd.Next(-20, 30);
-            }
+            masFirst = DataWork.CreateMas(size);
             dgFirst.ItemsSource = masFirst.ToDataTable().DefaultView;
-
             GraphRenderer.DrawGraph(csFirst, masFirst, Brushes.Blue, "Исходный массив");
 
             masSecond = null;
@@ -86,19 +79,7 @@ namespace PracticaKiryushova
                 MessageBox.Show("Сначала создайте массив!", "Внимание");
                 return;
             }
-
-            masSecond = (int[])masFirst.Clone();
-            int minIndex = 0;
-            int maxIndex = 0;
-
-            for (int i = 1; i < masSecond.Length; i++)
-            {
-                if (masSecond[i] < masSecond[minIndex]) minIndex = i;
-                if (masSecond[i] > masSecond[maxIndex]) maxIndex = i;
-            }
-            int temp = masSecond[minIndex];
-            masSecond[minIndex] = masSecond[maxIndex];
-            masSecond[maxIndex] = temp;
+            masSecond = DataWork.SwapMas(masFirst);
             dgSecond.ItemsSource = masSecond.ToDataTable().DefaultView;
             GraphRenderer.DrawGraph(csSecond, masSecond, Brushes.Red, "После замены Min/Max");
         }

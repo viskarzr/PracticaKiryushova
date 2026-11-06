@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PracticaKiryushova"
         mc:Ignorable="d"
-        Title="Вариант №10" Height="800" Width="1000" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Работа с массивами" Height="800" Width="1000" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
